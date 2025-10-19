@@ -1,0 +1,14 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 36px;
+  font-weight: 800;
+  border-bottom: 1px solid var(--borders);
+}
+
+.gold-span {
+  color: var(--accent);
+}
