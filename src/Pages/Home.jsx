@@ -1,11 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./Home.css";
+import { use } from "react";
 
 const wcUrl = "wss://stream.binance.com:9443/ws/!miniTicker@arr";
 
 export default function Home() {
   const [allPrices, setAllPrices] = useState({});
   const [status, setStatus] = useState("loading");
+  const [sortKey, setSortKey] = useState("currentPrice");
+  const [sortOrder, setSortOrder] = useState("desc");
+
+  const handleSort = (key, order) => {
+    setSortKey(key);
+    setSortOrder(order);
+  };
+
+  const finalMenu = useMemo(() => {
+    const cryptoMenu = Object.entries(allPrices).map(([symbol, data]) => ({
+      symbol: symbol,
+      ...data,
+    }));
+    const sortedMenu = [...cryptoMenu].sort((a, b) => {
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+
+      let ans = 0;
+      if (aValue < bValue) {
+        ans = -1;
+      } else if (aValue > bValue) {
+        ans = 1;
+      }
+      return sortOrder === "asc" ? ans : ans * -1;
+    });
+    return sortedMenu;
+  }, [allPrices, sortKey, sortOrder]);
+
   useEffect(() => {
     const ws = new WebSocket(wcUrl);
     ws.onopen = () => {
@@ -31,7 +60,10 @@ export default function Home() {
             const oldPrice = oldData ? oldData.currentPrice : 0;
             newPrices[symbol] = {
               currentPrice: price,
-              priceChange: price - oldPrice,
+              priceChange: oldPrice ? price - oldPrice : 0,
+              priceChangePercent: oldPrice
+                ? ((price - oldPrice) / oldPrice) * 100
+                : 0,
             };
           });
           return newPrices;
@@ -41,7 +73,6 @@ export default function Home() {
       }
       //console.log(allPrices);
     };
-
     return () => {
       ws.close();
     };
