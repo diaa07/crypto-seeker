@@ -1,0 +1,35 @@
+.home {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.crypto-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 80%;
+  border: 2px solid var(--accent);
+}
+
+.crypto-grid-upper-sec {
+  padding: 24px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 36px;
+}
+
+select {
+  background-color: var(--main-bg);
+  color: var(--main-text);
+}
+
+option {
+  background-color: var(--main-text);
+  color: var(--main-bg);
+}

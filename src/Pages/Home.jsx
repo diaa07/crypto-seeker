@@ -81,4 +81,46 @@ export default function Home() {
   useEffect(() => {
     console.log(allPrices);
   }, [allPrices]);
+
+  return (
+    <div className="home">
+      <div className="crypto-grid">
+        <div className="crypto-grid-upper-sec">
+          <select
+            value={sortKey}
+            id="sortKey"
+            onChange={(e) => {
+              handleSort(e.target.value, sortOrder);
+            }}
+          >
+            <option value="currentPrice">Current Price</option>
+            <option value="priceChange">Price Change</option>
+            <option value="priceChangePercent">Price Change Percent</option>
+          </select>
+          <select
+            value={sortOrder}
+            id="sortOrder"
+            onChange={(e) => {
+              handleSort(sortKey, e.target.value);
+            }}
+          >
+            <option value="asc">Ascending Order</option>
+            <option value="desc">Descending Order</option>
+          </select>
+        </div>
+        <div className="crypto-grid-lower-sec">
+          <ul>
+            {finalMenu.map((crypto) => {
+              return (
+                <li id={crypto.symbol}>
+                  {crypto.symbol} {crypto.currentPrice} {crypto.priceChange}(
+                  {crypto.priceChangePercent})
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 }
