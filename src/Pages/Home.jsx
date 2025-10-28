@@ -9,10 +9,21 @@ export default function Home() {
   const [status, setStatus] = useState("loading");
   const [sortKey, setSortKey] = useState("currentPrice");
   const [sortOrder, setSortOrder] = useState("desc");
+  const maxCurrsPerPage = 15;
+  const [maxPagesCount, setMaxPagesCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleSort = (key, order) => {
     setSortKey(key);
     setSortOrder(order);
+  };
+
+  const nextPage = () => {
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prev) => prev - 1);
   };
 
   const finalMenu = useMemo(() => {
@@ -21,8 +32,8 @@ export default function Home() {
       ...data,
     }));
     const sortedMenu = [...cryptoMenu].sort((a, b) => {
-      const aValue = a[sortKey];
-      const bValue = b[sortKey];
+      const aValue = Math.abs(a[sortKey]);
+      const bValue = Math.abs(b[sortKey]);
 
       let ans = 0;
       if (aValue < bValue) {
@@ -32,8 +43,11 @@ export default function Home() {
       }
       return sortOrder === "asc" ? ans : ans * -1;
     });
-    return sortedMenu;
-  }, [allPrices, sortKey, sortOrder]);
+    setMaxPagesCount(Math.ceil(sortedMenu.length / maxCurrsPerPage));
+    const startIndex = currentPage * maxCurrsPerPage;
+    const endIndex = Math.min(startIndex + maxCurrsPerPage, sortedMenu.length);
+    return sortedMenu.slice(startIndex, endIndex);
+  }, [allPrices, sortKey, sortOrder, currentPage]);
 
   useEffect(() => {
     const ws = new WebSocket(wcUrl);
@@ -112,13 +126,20 @@ export default function Home() {
           <ul>
             {finalMenu.map((crypto) => {
               return (
-                <li id={crypto.symbol}>
+                <li key={crypto.symbol}>
                   {crypto.symbol} {crypto.currentPrice} {crypto.priceChange}(
                   {crypto.priceChangePercent})
                 </li>
               );
             })}
           </ul>
+        </div>
+        <div className="pagination-sec">
+          showing page {currentPage + 1} out of {maxPagesCount + 1}
+          {currentPage < maxPagesCount && (
+            <button onClick={() => nextPage()}>next</button>
+          )}
+          {currentPage > 0 && <button onClick={() => prevPage()}>prev</button>}
         </div>
       </div>
     </div>
