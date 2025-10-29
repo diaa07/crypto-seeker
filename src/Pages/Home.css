@@ -129,3 +129,9 @@
   color: var(--primary-bg);
   padding: 4px;
 }
+
+@media (max-width: 1200px) {
+  .crypto-menu {
+    width: 100%;
+  }
+}
