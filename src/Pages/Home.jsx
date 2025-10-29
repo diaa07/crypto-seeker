@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import "./Home.css";
-import { use } from "react";
 
 const wcUrl = "wss://stream.binance.com:9443/ws/!miniTicker@arr";
 
@@ -12,6 +11,8 @@ export default function Home() {
   const maxCurrsPerPage = 15;
   const [maxPagesCount, setMaxPagesCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
+  const [sortKeyOpen, setSortKeyOpen] = useState(false);
+  const [sortOrderOpen, setSortOrderOpen] = useState(false);
 
   const handleSort = (key, order) => {
     setSortKey(key);
@@ -100,39 +101,108 @@ export default function Home() {
     <div className="home">
       <div className="crypto-grid">
         <div className="crypto-grid-upper-sec">
-          <select
-            value={sortKey}
-            id="sortKey"
-            onChange={(e) => {
-              handleSort(e.target.value, sortOrder);
-            }}
-          >
-            <option value="currentPrice">Current Price</option>
-            <option value="priceChange">Price Change</option>
-            <option value="priceChangePercent">Price Change Percent</option>
-          </select>
-          <select
-            value={sortOrder}
-            id="sortOrder"
-            onChange={(e) => {
-              handleSort(sortKey, e.target.value);
-            }}
-          >
-            <option value="asc">Ascending Order</option>
-            <option value="desc">Descending Order</option>
-          </select>
+          <div className="selecter">
+            <div
+              className="current-selection"
+              onClick={() => setSortKeyOpen(!sortKeyOpen)}
+            >
+              {sortKey} &#9660;{" "}
+            </div>{" "}
+            <div
+              className={`selection-menu-${sortKeyOpen ? "open" : "closed"}`}
+            >
+              <div
+                className="selection-option"
+                onClick={() => {
+                  handleSort("currentPrice", sortOrder);
+                  setSortKeyOpen(false);
+                }}
+              >
+                Current Price
+              </div>
+              <div
+                className="selection-option"
+                onClick={() => {
+                  handleSort("priceChange", sortOrder);
+                  setSortKeyOpen(false);
+                }}
+              >
+                Price Change
+              </div>
+              <div
+                className="selection-option"
+                onClick={() => {
+                  handleSort("priceChangePercent", sortOrder);
+                  setSortKeyOpen(false);
+                }}
+              >
+                Price Change Percent
+              </div>
+            </div>
+          </div>
+
+          <div className="selecter">
+            <div
+              className="current-selection"
+              onClick={() => setSortOrderOpen(!sortOrderOpen)}
+            >
+              {sortOrder} &#9660;{" "}
+            </div>
+            <div
+              className={`selection-menu-${sortOrderOpen ? "open" : "closed"}`}
+            >
+              <div
+                className="selection-option"
+                onClick={() => {
+                  handleSort(sortKey, "asc");
+                  setSortOrderOpen(false);
+                }}
+              >
+                ASC
+              </div>
+              <div
+                className="selection-option"
+                onClick={() => {
+                  handleSort(sortKey, "desc");
+                  setSortOrderOpen(false);
+                }}
+              >
+                Desc
+              </div>
+            </div>
+          </div>
         </div>
         <div className="crypto-grid-lower-sec">
-          <ul>
-            {finalMenu.map((crypto) => {
-              return (
-                <li key={crypto.symbol}>
-                  {crypto.symbol} {crypto.currentPrice} {crypto.priceChange}(
-                  {crypto.priceChangePercent})
-                </li>
-              );
-            })}
-          </ul>
+          <table className="crypto-menu">
+            <thead>
+              <tr>
+                <td>Name</td>
+                <td>Price</td>
+                <td>Price Change</td>
+              </tr>
+            </thead>
+            <tbody>
+              {finalMenu.map((crypto) => {
+                return (
+                  <tr key={crypto.symbol} className="crypto-item">
+                    <td className="crypto-symbol">{crypto.symbol}</td>
+                    <td className="crypto-price">
+                      {crypto.currentPrice.toFixed(5)}
+                    </td>
+                    <td
+                      className={`crypto-price-change-${
+                        crypto.priceChange >= 0 ? "inc" : "dec"
+                      }`}
+                    >
+                      {crypto.priceChange.toFixed(5)} (
+                      {crypto.priceChangePercent.toFixed(2)}
+                      %)
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
         <div className="pagination-sec">
           showing page {currentPage + 1} out of {maxPagesCount + 1}

@@ -17,5 +17,5 @@ body {
   background-color: var(--primary-bg);
   color: var(--primary-text);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  width: 100vw;
+  max-width: 100vw;
 }

@@ -3,7 +3,7 @@
   flex-direction: row;
   width: 100%;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 16px;
 }
 
 .crypto-grid {
@@ -12,11 +12,11 @@
   justify-content: flex-start;
   align-items: center;
   width: 80%;
-  border: 2px solid var(--accent);
+  border: none;
 }
 
 .crypto-grid-upper-sec {
-  padding: 24px 0;
+  padding: 8px 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -24,12 +24,108 @@
   gap: 36px;
 }
 
-select {
-  background-color: var(--main-bg);
-  color: var(--main-text);
+.crypto-grid-lower-sec {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
 }
 
-option {
-  background-color: var(--main-text);
-  color: var(--main-bg);
+.selecter {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: relative;
+}
+
+.current-selection {
+  display: flex;
+  justify-content: center;
+  height: fit-content;
+  padding: 8px;
+  cursor: pointer;
+  border: 3px solid var(--borders);
+}
+
+.selection-menu-closed {
+  display: none;
+}
+
+.selection-menu-open {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  background-color: var(--primary-bg);
+  border: 1px solid var(--borders);
+  min-width: 100%;
+}
+
+.selection-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  text-align: left;
+  background-color: var(--main-bg);
+}
+
+.crypto-menu {
+  height: auto;
+  width: 60%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-top: 16px;
+  table-layout: fixed;
+  border: 2px solid var(--borders);
+  border-radius: 24px !important;
+}
+
+.crypto-menu thead td {
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 16px;
+  border-bottom: 1px solid var(--borders);
+  text-align: center;
+}
+
+.crypto-menu tbody tr td {
+  text-align: center;
+  padding: 12px 16px;
+  vertical-align: middle;
+}
+
+.crypto-symbol {
+  width: 30%;
+}
+
+.crypto-price,
+[class^="crypto-price-change"] {
+  width: 35%;
+}
+
+.crypto-price-change-inc {
+  color: var(--bullish);
+}
+
+.crypto-price-change-dec {
+  color: var(--bearish);
+}
+
+.pagination-sec {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  padding: 16px;
+  max-width: 600px;
+}
+
+.pagination-sec button {
+  margin-left: 8px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  background-color: var(--accent);
+  color: var(--primary-bg);
+  padding: 4px;
 }
